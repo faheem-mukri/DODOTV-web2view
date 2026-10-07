@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DodoTV</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="DodoTV - Secure & Responsive URL WebView for LG webOS TV">
+  
+  <!-- Security Headers: Strict CSP, Referrer Policy, No-Sniff -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: http:; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http: blob:; media-src https: http: blob: data:; frame-src https: http:; connect-src 'self' https: http: wss: ws:; font-src 'self' data:; object-src 'none'; base-uri 'none';">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="webOSTVjs-1.2.13/webOSTV.js" charset="utf-8"></script>
+</head>
+<body class="tv-body">
+  <!-- App Wrapper -->
+  <div id="app" class="app-container">
+
+    <!-- ==================== HOME SCREEN ==================== -->
+    <main id="home-screen" class="screen screen-home active" role="main">
+      <!-- Top Navigation / Status Header -->
+      <header class="tv-header">
+        <div class="brand">
+          <img src="assets/logo.png" alt="DodoTV Logo" class="brand-logo" onerror="this.style.display='none'">
+          <div class="brand-text">
+            <h1 class="brand-title">DodoTV</h1>
+            <p class="brand-subtitle">Smart URL WebView Player</p>
+          </div>
+        </div>
+
+        <div class="header-status">
+          <div id="network-pill" class="status-pill online">
+            <span class="status-dot"></span>
+            <span id="network-text">Connected</span>
+          </div>
+          <button id="btn-sound-toggle" class="btn-ghost focusable" tabindex="0" title="Toggle Remote Sound FX">
+            <span id="sound-icon">🔊 Sound On</span>
+          </button>
+          <div id="clock-display" class="clock-display">--:--</div>
+        </div>
+      </header>
+
+      <!-- Main Input Panel -->
+      <section class="url-hero-section">
+        <div class="input-card">
+          <div class="input-header-row">
+            <label for="url-input" class="input-label">Enter Website or Video Stream URL</label>
+            <span class="input-hint">Remote OK / Virtual Keyboard to type</span>
+          </div>
+
+          <div class="input-action-bar">
+            <div class="input-field-wrapper">
+              <span class="input-protocol-badge" id="protocol-badge">https://</span>
+              <input 
+                type="url" 
+                id="url-input" 
+                class="tv-input focusable" 
+                tabindex="0"
+                placeholder="example.com/stream.mp4 or website URL" 
+                autocomplete="off" 
+                autocorrect="off" 
+                autocapitalize="off" 
+                spellcheck="false"
+                maxlength="2048"
+              />
+              <button id="btn-clear-input" class="btn-icon-clear focusable" tabindex="0" title="Clear input">✕</button>
+            </div>
+
+            <button id="btn-open" class="btn-primary-action focusable" tabindex="0">
+              <span class="btn-icon">▶</span>
+              <span class="btn-label">OPEN</span>
+            </button>
+          </div>
+
+          <!-- Quick URL Chips / Keyboard Helpers -->
+          <div class="chips-row">
+            <span class="chips-label">Quick Inserts:</span>
+            <button class="chip focusable" tabindex="0" data-insert="https://">https://</button>
+            <button class="chip focusable" tabindex="0" data-insert="http://">http://</button>
+            <button class="chip focusable" tabindex="0" data-insert=".com">.com</button>
+            <button class="chip focusable" tabindex="0" data-insert=".org">.org</button>
+            <button class="chip focusable" tabindex="0" data-insert=".net">.net</button>
+            <button class="chip focusable" tabindex="0" data-insert=".tv">.tv</button>
+            <button class="chip focusable" tabindex="0" data-insert="/">/</button>
+            <button class="chip focusable" tabindex="0" id="btn-sample-url">📋 Sample Video</button>
+            <button class="chip focusable" tabindex="0" id="btn-toggle-vkeyboard">⌨ Remote Keyboard</button>
+            <button class="chip focusable" tabindex="0" id="btn-add-favorite">★ Save Favorite</button>
+          </div>
+
+          <!-- On-Screen Virtual Remote Keyboard (Collapsible) -->
+          <div id="virtual-keyboard-panel" class="virtual-keyboard-panel collapsed">
+            <div class="vkeys-row">
+              <button class="vkey focusable" tabindex="0" data-char="1">1</button>
+              <button class="vkey focusable" tabindex="0" data-char="2">2</button>
+              <button class="vkey focusable" tabindex="0" data-char="3">3</button>
+              <button class="vkey focusable" tabindex="0" data-char="4">4</button>
+              <button class="vkey focusable" tabindex="0" data-char="5">5</button>
+              <button class="vkey focusable" tabindex="0" data-char="6">6</button>
+              <button class="vkey focusable" tabindex="0" data-char="7">7</button>
+              <button class="vkey focusable" tabindex="0" data-char="8">8</button>
+              <button class="vkey focusable" tabindex="0" data-char="9">9</button>
+              <button class="vkey focusable" tabindex="0" data-char="0">0</button>
+              <button class="vkey vkey-fn focusable" tabindex="0" id="vkey-backspace">⌫ Del</button>
+            </div>
+            <div class="vkeys-row">
+              <button class="vkey focusable" tabindex="0" data-char="q">q</button>
+              <button class="vkey focusable" tabindex="0" data-char="w">w</button>
+              <button class="vkey focusable" tabindex="0" data-char="e">e</button>
+              <button class="vkey focusable" tabindex="0" data-char="r">r</button>
+              <button class="vkey focusable" tabindex="0" data-char="t">t</button>
+              <button class="vkey focusable" tabindex="0" data-char="y">y</button>
+              <button class="vkey focusable" tabindex="0" data-char="u">u</button>
+              <button class="vkey focusable" tabindex="0" data-char="i">i</button>
+              <button class="vkey focusable" tabindex="0" data-char="o">o</button>
+              <button class="vkey focusable" tabindex="0" data-char="p">p</button>
+              <button class="vkey focusable" tabindex="0" data-char="-">-</button>
+            </div>
+            <div class="vkeys-row">
+              <button class="vkey focusable" tabindex="0" data-char="a">a</button>
+              <button class="vkey focusable" tabindex="0" data-char="s">s</button>
+              <button class="vkey focusable" tabindex="0" data-char="d">d</button>
+              <button class="vkey focusable" tabindex="0" data-char="f">f</button>
+              <button class="vkey focusable" tabindex="0" data-char="g">g</button>
+              <button class="vkey focusable" tabindex="0" data-char="h">h</button>
+              <button class="vkey focusable" tabindex="0" data-char="j">j</button>
+              <button class="vkey focusable" tabindex="0" data-char="k">k</button>
+              <button class="vkey focusable" tabindex="0" data-char="l">l</button>
+              <button class="vkey focusable" tabindex="0" data-char=":">:</button>
+              <button class="vkey focusable" tabindex="0" data-char="/">/</button>
+            </div>
+            <div class="vkeys-row">
+              <button class="vkey focusable" tabindex="0" data-char="z">z</button>
+              <button class="vkey focusable" tabindex="0" data-char="x">x</button>
+              <button class="vkey focusable" tabindex="0" data-char="c">c</button>
+              <button class="vkey focusable" tabindex="0" data-char="v">v</button>
+              <button class="vkey focusable" tabindex="0" data-char="b">b</button>
+              <button class="vkey focusable" tabindex="0" data-char="n">n</button>
+              <button class="vkey focusable" tabindex="0" data-char="m">m</button>
+              <button class="vkey focusable" tabindex="0" data-char=".">.</button>
+              <button class="vkey focusable" tabindex="0" data-char="?">?</button>
+              <button class="vkey focusable" tabindex="0" data-char="=">=</button>
+              <button class="vkey vkey-fn focusable" tabindex="0" id="vkey-done">✓ Done</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Middle Section: Quick Presets & Test Streams -->
+      <section class="presets-section">
+        <h2 class="section-title">
+          <span>Featured & Video Stream Presets</span>
+          <span class="section-subtitle">Click to test instantly on your TV</span>
+        </h2>
+        <div class="presets-grid" id="presets-grid">
+          <div class="preset-card focusable" tabindex="0" data-url="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" data-title="Big Buck Bunny (MP4 Demo)">
+            <div class="preset-badge">Video</div>
+            <div class="preset-icon">🐰</div>
+            <div class="preset-info">
+              <div class="preset-name">Big Buck Bunny</div>
+              <div class="preset-desc">HTML5 MP4 Video Stream Demo</div>
+            </div>
+          </div>
+
+          <div class="preset-card focusable" tabindex="0" data-url="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4" data-title="Tears of Steel (Sci-Fi Demo)">
+            <div class="preset-badge">Video</div>
+            <div class="preset-icon">🚀</div>
+            <div class="preset-info">
+              <div class="preset-name">Tears of Steel</div>
+              <div class="preset-desc">Blender Open Movie Test Player</div>
+            </div>
+          </div>
+
+          <div class="preset-card focusable" tabindex="0" data-url="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4" data-title="Sintel (Open Movie)">
+            <div class="preset-badge">Video</div>
+            <div class="preset-icon">🐉</div>
+            <div class="preset-info">
+              <div class="preset-name">Sintel</div>
+              <div class="preset-desc">Animation HTML5 Player Test</div>
+            </div>
+          </div>
+
+          <div class="preset-card focusable" tabindex="0" data-url="https://www.youtube.com/tv" data-title="YouTube TV Web">
+            <div class="preset-badge">Web</div>
+            <div class="preset-icon">📺</div>
+            <div class="preset-info">
+              <div class="preset-name">YouTube Web</div>
+              <div class="preset-desc">web-based player</div>
+            </div>
+          </div>
+
+          <div class="preset-card focusable" tabindex="0" data-url="https://player.vimeo.com/video/76979871" data-title="Vimeo Player Test">
+            <div class="preset-badge">Player</div>
+            <div class="preset-icon">🎬</div>
+            <div class="preset-info">
+              <div class="preset-name">Vimeo Player</div>
+              <div class="preset-desc">Embed Video Player Test</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom Lists Section: Recents & Favorites -->
+      <section class="lists-container">
+        <!-- Recents Column -->
+        <div class="list-column">
+          <div class="list-column-header">
+            <div class="list-title-wrap">
+              <h2 class="list-title">Recent URLs</h2>
+              <span id="recent-count" class="list-count-badge">0</span>
+            </div>
+            <button id="btn-clear-recents" class="btn-text-action focusable" tabindex="0">Clear All</button>
+          </div>
+          <div id="recent-list" class="url-items-list" role="list">
+            <!-- Populated via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Favorites Column -->
+        <div class="list-column">
+          <div class="list-column-header">
+            <div class="list-title-wrap">
+              <h2 class="list-title">Saved Favorites</h2>
+              <span id="favorites-count" class="list-count-badge">0</span>
+            </div>
+          </div>
+          <div id="favorites-list" class="url-items-list" role="list">
+            <!-- Populated via JavaScript -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Remote Control Bar Legend (Footer) -->
+      <footer class="remote-legend-footer">
+        <div class="legend-item"><kbd class="key-badge">▲▼◄►</kbd> Navigate</div>
+        <div class="legend-item"><kbd class="key-badge">OK</kbd> Select</div>
+        <div class="legend-item"><kbd class="key-badge">BACK</kbd> Return / Exit</div>
+        <div class="legend-item"><kbd class="key-badge red-dot">RED</kbd> Focus URL</div>
+        <div class="legend-item"><kbd class="key-badge green-dot">GREEN</kbd> Open URL</div>
+        <div class="legend-item"><kbd class="key-badge yellow-dot">YELLOW</kbd> Favorite</div>
+        <div class="legend-item"><kbd class="key-badge blue-dot">BLUE</kbd> Clear</div>
+      </footer>
+    </main>
+
+    <!-- ==================== WEBVIEW SCREEN ==================== -->
+    <section id="webview-screen" class="screen screen-webview" aria-label="Website Player Screen">
+      <!-- Auto-Hiding Remote HUD Header Bar -->
+      <header id="webview-hud" class="webview-hud active">
+        <div class="hud-left">
+          <button id="hud-btn-back" class="hud-btn hud-btn-accent focusable" tabindex="0">
+            <span class="hud-icon">◄</span>
+            <span>Home</span>
+          </button>
+          <button id="hud-btn-reload" class="hud-btn focusable" tabindex="0" title="Reload Web Page">
+            <span class="hud-icon">🔄</span>
+            <span>Reload</span>
+          </button>
+        </div>
+
+        <div class="hud-center">
+          <span class="hud-url-indicator" id="hud-url-display">https://...</span>
+        </div>
+
+        <div class="hud-right">
+          <button id="hud-btn-direct" class="hud-btn focusable" tabindex="0" title="Direct Window Mode">
+            <span class="hud-icon">🚀</span>
+            <span>Direct Mode</span>
+          </button>
+          <button id="hud-btn-fullscreen" class="hud-btn focusable" tabindex="0" title="Toggle Fullscreen">
+            <span class="hud-icon">⛶</span>
+            <span>Fullscreen</span>
+          </button>
+          <button id="hud-btn-hide" class="hud-btn focusable" tabindex="0" title="Hide Controls Bar">
+            <span class="hud-icon">✕</span>
+            <span>Hide HUD</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Secure WebView Frame (No allow-top-navigation, strict isolation) -->
+      <div class="iframe-container" id="iframe-container">
+        <iframe 
+          id="webview-frame" 
+          class="webview-frame"
+          src="about:blank"
+          allow="autoplay; fullscreen; encrypted-media; picture-in-picture; accelerometer; gyroscope"
+          allowfullscreen="true"
+          webkitallowfullscreen="true"
+          mozallowfullscreen="true"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals allow-presentation"
+          referrerpolicy="strict-origin-when-cross-origin"
+        ></iframe>
+      </div>
+
+      <!-- Edge Hover / Focus Zone to re-open HUD -->
+      <div id="hud-trigger-zone" class="hud-trigger-zone" title="Show TV controls"></div>
+    </section>
+
+    <!-- ==================== LOADING OVERLAY ==================== -->
+    <div id="loading-overlay" class="modal-overlay hidden" aria-live="assertive">
+      <div class="loading-card">
+        <div class="tv-spinner"></div>
+        <h2 class="loading-title">Loading Page...</h2>
+        <p id="loading-target-url" class="loading-url">https://example.com</p>
+        <div class="loading-progress-bar">
+          <div class="loading-progress-fill"></div>
+        </div>
+        <button id="btn-cancel-loading" class="btn-secondary focusable" tabindex="0">Cancel</button>
+      </div>
+    </div>
+
+    <!-- ==================== ERROR SCREEN / MODAL ==================== -->
+    <div id="error-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+      <div class="error-card">
+        <div class="error-icon-badge">⚠️</div>
+        <h2 id="error-title" class="error-title">Unable to load page</h2>
+        <p id="error-message" class="error-message">
+          Check your internet connection or verify that the URL is correct.
+        </p>
+        <div id="error-url-ref" class="error-url-ref">https://...</div>
+        
+        <div class="error-actions-row">
+          <button id="btn-error-retry" class="btn-primary-action focusable" tabindex="0">
+            <span>🔄</span> RETRY
+          </button>
+          <button id="btn-error-direct" class="btn-secondary focusable" tabindex="0">
+            <span>🚀</span> DIRECT BROWSER
+          </button>
+          <button id="btn-error-home" class="btn-ghost-danger focusable" tabindex="0">
+            <span>🏠</span> HOME
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SIMPLE ALERT MODAL ==================== -->
+    <div id="alert-modal" class="modal-overlay hidden" role="alertdialog" aria-modal="true">
+      <div class="alert-card">
+        <div class="alert-icon">ℹ️</div>
+        <h3 id="alert-modal-title" class="alert-title">Notice</h3>
+        <p id="alert-modal-message" class="alert-message">Alert message details</p>
+        <button id="btn-alert-ok" class="btn-primary-action focusable" tabindex="0">OK</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

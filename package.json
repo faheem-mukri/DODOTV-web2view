@@ -1,0 +1,17 @@
+{
+  "name": "dodotv-project",
+  "version": "1.0.0",
+  "description": "DodoTV - Lightweight URL WebView for LG webOS TV",
+  "scripts": {
+    "package": "npx -p @webos-tools/cli ares-package ./dodotv -o .",
+    "serve": "npx -y serve ./dodotv -p 8080"
+  },
+  "keywords": [
+    "webos",
+    "dodotv",
+    "smart-tv",
+    "lg-tv"
+  ],
+  "author": "DodoTV",
+  "license": "MIT"
+}

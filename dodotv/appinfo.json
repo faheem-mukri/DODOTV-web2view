@@ -1,0 +1,17 @@
+{
+  "id": "com.dodotv.app",
+  "version": "1.0.0",
+  "vendor": "DodoTV",
+  "type": "web",
+  "main": "index.html",
+  "title": "DodoTV",
+  "icon": "icon.png",
+  "largeIcon": "largeIcon.png",
+  "resolution": "1920x1080",
+  "appDescription": "DodoTV - Lightweight URL WebView for LG webOS TV",
+  "disableBackHistoryAPI": true,
+  "inspectable": true,
+  "handlesRelaunch": true,
+  "trustExternalLandings": false,
+  "requiredACG": []
+}
