@@ -12,6 +12,10 @@
   "disableBackHistoryAPI": true,
   "inspectable": true,
   "handlesRelaunch": true,
-  "trustExternalLandings": false,
+  "vendorExtension": {
+    "allowCrossDomain": true
+  },
+  "trustLevel": "default",
+  "supportQuickStart": true,
   "requiredACG": []
 }
